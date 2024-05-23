@@ -1,14 +1,28 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub mod bellman_ford_algorithm;
+pub mod binary_indexed_tree;
+pub mod binary_indexed_tree_2d;
+pub mod coordinate_compression;
+pub mod cumulative_sum;
+pub mod dijkstras_algorithm;
+pub mod dual_segment_tree;
+pub mod dynamic_binary_indexed_tree;
+pub mod dynamic_binary_indexed_tree_2d;
+pub mod floyd_warshall_algorithm;
+pub mod graph;
+pub mod lazy_segment_tree;
+pub mod low_link;
+pub mod lowest_common_ancestor;
+pub mod manachers_algorithm;
+pub mod miller_rabin_primality_test;
+pub mod modint;
+pub mod monoid;
+pub mod offline_lca;
+pub mod rolling_hash;
+pub mod segment_tree;
+pub mod sieve_of_eratosthenes;
+pub mod sparse_table;
+pub mod static_rectangle_sum;
+pub mod strongly_connected_components;
+pub mod topological_sort;
+pub mod union_find;
+pub mod z_algorithm;
