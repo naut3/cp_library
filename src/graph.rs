@@ -1,28 +1,64 @@
-pub struct Graph<T> {
-    pub size: usize,
-    adjacency_list: Vec<Vec<(usize, T)>>,
+/// グラフ
+pub trait Graph {
+    type Weight;
+    fn size(&self) -> usize;
+    fn add_edge(&mut self, u: usize, v: usize, w: Self::Weight);
+    fn adjacent(&self, v: usize) -> &Vec<(usize, Self::Weight)>;
 }
 
-impl<T: Clone> Graph<T> {
+/// 有向グラフ
+pub struct DirectedGraph<W> {
+    pub size: usize,
+    adjacency_list: Vec<Vec<(usize, W)>>,
+}
+
+impl<W: Clone> DirectedGraph<W> {
     pub fn new(size: usize) -> Self {
         return Self {
             size,
             adjacency_list: vec![vec![]; size],
         };
     }
+}
 
-    pub fn add_directed_edge(&mut self, from: usize, to: usize, weight: &T) {
-        assert!(from < self.size && to < self.size);
-        self.adjacency_list[from].push((to, weight.clone()));
+impl<W> Graph for DirectedGraph<W> {
+    type Weight = W;
+    fn size(&self) -> usize {
+        self.size
     }
-
-    pub fn add_undirected_edge(&mut self, u: usize, v: usize, weight: &T) {
-        assert!(u < self.size && v < self.size);
-        self.adjacency_list[u].push((v, weight.clone()));
-        self.adjacency_list[v].push((u, weight.clone()));
+    fn add_edge(&mut self, u: usize, v: usize, w: Self::Weight) {
+        self.adjacency_list[u].push((v, w));
     }
+    fn adjacent(&self, v: usize) -> &Vec<(usize, W)> {
+        &self.adjacency_list[v]
+    }
+}
 
-    pub fn adjacent(&self, v: usize) -> std::slice::Iter<'_, (usize, T)> {
-        return self.adjacency_list[v].iter();
+/// 無向グラフ
+pub struct UndirectedGraph<W> {
+    pub size: usize,
+    adjacency_list: Vec<Vec<(usize, W)>>,
+}
+
+impl<W: Clone> UndirectedGraph<W> {
+    pub fn new(size: usize) -> Self {
+        return Self {
+            size,
+            adjacency_list: vec![vec![]; size],
+        };
+    }
+}
+
+impl<W: Clone> Graph for UndirectedGraph<W> {
+    type Weight = W;
+    fn size(&self) -> usize {
+        self.size
+    }
+    fn add_edge(&mut self, u: usize, v: usize, w: Self::Weight) {
+        self.adjacency_list[u].push((v, w.clone()));
+        self.adjacency_list[v].push((u, w));
+    }
+    fn adjacent(&self, v: usize) -> &Vec<(usize, W)> {
+        &self.adjacency_list[v]
     }
 }
