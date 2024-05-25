@@ -18,6 +18,7 @@ pub mod miller_rabin_primality_test;
 pub mod modint;
 pub mod monoid;
 pub mod offline_lca;
+pub mod restore_shortest_path;
 pub mod rolling_hash;
 pub mod segment_tree;
 pub mod sieve_of_eratosthenes;
