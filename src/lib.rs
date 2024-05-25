@@ -9,6 +9,7 @@ pub mod dynamic_binary_indexed_tree;
 pub mod dynamic_binary_indexed_tree_2d;
 pub mod floyd_warshall_algorithm;
 pub mod graph;
+pub mod heavy_light_decomposition;
 pub mod lazy_segment_tree;
 pub mod low_link;
 pub mod lowest_common_ancestor;
