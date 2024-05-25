@@ -33,3 +33,4 @@
 * topological_sort
 * union_find
 * z_algorithm
+* heavy_light_decomposition
