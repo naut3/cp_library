@@ -11,6 +11,10 @@
 * [Dijkstra's algorithm](./src/dijkstras_algorithm.rs)
   * [最短経路の復元](./src/restore_shortest_path.rs)
 
+### 木
+
+* [HL分解(Heavy Light Decomposition)](./src/heavy_light_decomposition.rs)
+
 ## 文字列
 
 * [Rolling Hash](./src/rolling_hash.rs)
