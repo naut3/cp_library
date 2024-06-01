@@ -4,6 +4,7 @@
 
 * [Union-Find](./src/union_find.rs)
 * [Binary Indexed Tree](./src/binary_indexed_tree.rs)
+* [Segment Tree](./src/segment_tree.rs)
 
 ## グラフ
 
