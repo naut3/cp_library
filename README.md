@@ -11,6 +11,7 @@
 * [Graph](./src/graph.rs)
 * [Dijkstra's algorithm](./src/dijkstras_algorithm.rs)
   * [最短経路の復元](./src/restore_shortest_path.rs)
+* [Strongly Connected Components(強連結成分分解)](./src/scc.rs)
 
 ### 木
 

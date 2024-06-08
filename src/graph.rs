@@ -7,6 +7,7 @@ pub trait Graph {
 }
 
 /// 有向グラフ
+#[derive(Clone)]
 pub struct DirectedGraph<W> {
     pub size: usize,
     pub adjacency_list: Vec<Vec<(usize, W)>>,
@@ -35,6 +36,7 @@ impl<W> Graph for DirectedGraph<W> {
 }
 
 /// 無向グラフ
+#[derive(Clone)]
 pub struct UndirectedGraph<W> {
     pub size: usize,
     pub adjacency_list: Vec<Vec<(usize, W)>>,
