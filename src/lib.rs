@@ -24,7 +24,7 @@ pub mod segment_tree;
 pub mod sieve_of_eratosthenes;
 pub mod sparse_table;
 pub mod static_rectangle_sum;
-pub mod strongly_connected_components;
+pub mod scc;
 pub mod topological_sort;
 pub mod union_find;
 pub mod z_algorithm;
