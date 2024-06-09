@@ -1,21 +1,7 @@
-use crate::graph::{DirectedGraph, Graph};
+use crate::graph::DirectedGraph;
 
-impl<T: Copy> DirectedGraph<T> {
-    fn rev(&self) -> Self {
-        let mut graph = DirectedGraph::new(self.size);
-
-        for i in 0..self.size {
-            for &(v, w) in self.adjacent(i) {
-                graph.add_edge(v, i, w);
-            }
-        }
-
-        return graph;
-    }
-}
-
-/// 強連結成分分解
-pub fn strongly_connected_components<T: Clone + Copy>(graph: DirectedGraph<T>) -> Vec<usize> {
+/// 強連結成分分解を行う
+pub fn strongly_connected_components<T: Clone + Copy>(graph: &DirectedGraph<T>) -> Vec<usize> {
     struct SCC<T> {
         graph: DirectedGraph<T>,
         seen: Vec<bool>,
@@ -78,4 +64,50 @@ pub fn strongly_connected_components<T: Clone + Copy>(graph: DirectedGraph<T>) -
     }
 
     return ret;
+}
+
+/// 強連結成分分解して、各連結成分の大きさと、連結成分を頂点とみなしたグラフを求める
+pub fn scc_graph<T: Clone + Copy>(
+    graph: &DirectedGraph<T>,
+) -> (Vec<usize>, Vec<usize>, DirectedGraph<()>) {
+    let scc = strongly_connected_components(graph);
+
+    let n = scc.iter().max().unwrap() + 1;
+    let mut scc_sizes = vec![0; n];
+    let mut scc_graph = DirectedGraph::new(n);
+
+    for i in 0..graph.size {
+        scc_sizes[scc[i]] += 1;
+
+        for &(v, _) in graph.adjacent(i) {
+            scc_graph.add_edge(scc[i], scc[v], ());
+        }
+    }
+
+    scc_graph.to_unique();
+
+    return (scc, scc_sizes, scc_graph);
+}
+
+impl<T: Copy> DirectedGraph<T> {
+    fn rev(&self) -> Self {
+        let mut graph = DirectedGraph::new(self.size);
+
+        for i in 0..self.size {
+            for &(v, w) in self.adjacent(i) {
+                graph.add_edge(v, i, w);
+            }
+        }
+
+        return graph;
+    }
+}
+
+impl<T: Copy + std::cmp::Ord> DirectedGraph<T> {
+    fn to_unique(&mut self) {
+        for i in 0..self.size {
+            self.adjacency_list[i].sort();
+            self.adjacency_list[i].dedup();
+        }
+    }
 }
