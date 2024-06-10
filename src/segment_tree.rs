@@ -8,16 +8,16 @@ pub struct SegmentTree<M: Monoid> {
 impl<M: Monoid<S = S>, S: Clone + Copy> SegmentTree<M> {
     /// self = [e; size]
     pub fn new(size: usize) -> Self {
-        return Self {
-            size: size,
-            tree: vec![M::E; 2 * size],
-        };
+        Self {
+            size,
+            tree: vec![M::E; size << 1],
+        }
     }
 
     /// self = array
     pub fn from(array: &[M::S]) -> Self {
         let size = array.len();
-        let mut tree = vec![M::E; 2 * size];
+        let mut tree = vec![M::E; size << 1];
 
         for i in 0..size {
             tree[i + size] = array[i];
