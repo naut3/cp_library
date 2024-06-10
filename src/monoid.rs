@@ -16,6 +16,10 @@ pub struct Min<T> {
     _marker: std::marker::PhantomData<T>,
 }
 
+pub struct Update<T> {
+    _marker: std::marker::PhantomData<T>,
+}
+
 macro_rules! impl_primitives {
     ($($t: ty), *) => {
         $(
@@ -40,6 +44,14 @@ macro_rules! impl_primitives {
                 const E: Self::S = <$t>::MAX;
                 fn op(lhs: &Self::S, rhs: &Self::S) -> Self::S {
                     std::cmp::min(*lhs, *rhs)
+                }
+            }
+
+            impl Monoid for Update<$t> {
+                type S = $t;
+                const E: Self::S = <$t>::MAX;
+                fn op(_: &Self::S, rhs: &Self::S) -> Self::S {
+                    *rhs
                 }
             }
         )*
