@@ -1,3 +1,4 @@
+
 class UnionFind:
     def __init__(self, size: int):
         self.data = [-1] * size
@@ -26,4 +27,4 @@ class UnionFind:
         self.data[v] = u
 
     def size(self, v: int) -> int:
-        return -self.find(self.data[v])
+        return -self.data[self.find(v)]
