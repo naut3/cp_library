@@ -1,4 +1,4 @@
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Default, Hash)]
 pub struct ModInt<const P: u32>(u32);
 
 impl<const P: u32> ModInt<P> {
@@ -173,6 +173,13 @@ impl<const P: u32> std::ops::Div for ModInt<P> {
 impl<const P: u32> std::ops::DivAssign for ModInt<P> {
     fn div_assign(&mut self, rhs: Self) {
         *self *= rhs.inv();
+    }
+}
+
+impl<const P: u32> std::ops::Neg for ModInt<P> {
+    type Output = Self;
+    fn neg(self) -> Self::Output {
+        Self::new() - self
     }
 }
 
