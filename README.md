@@ -28,6 +28,7 @@
 
 * [Coordinate Compression](./src/coordinate_compression.rs)
 * [ModInt](./src/modint.rs)
+* [二項係数を計算するやつ](./src/combination.rs)
 
 ## 書きかけ
 
