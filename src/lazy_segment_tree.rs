@@ -23,6 +23,30 @@ pub struct AddMax<T> {
     _marker: std::marker::PhantomData<T>,
 }
 
+/// 区間加算, 区間和クエリに応える
+/// <注意>
+/// 初期化するとき、最初は長さが 1 の要素が挿入されるので
+/// S::from(value)をすべての i に対して insert する必要がある
+pub struct AddSum<T> {
+    _marker: std::marker::PhantomData<T>,
+}
+
+#[derive(Clone, Copy)]
+pub struct S<T> {
+    value: T,
+    length: usize,
+}
+
+impl<T: Copy> S<T> {
+    pub fn from(value: T) -> Self {
+        Self { value, length: 1 }
+    }
+
+    pub fn value(&self) -> T {
+        self.value
+    }
+}
+
 macro_rules! impl_primitives {
     ($($t: ty), *) => {
         $(
@@ -59,6 +83,38 @@ macro_rules! impl_primitives {
 
                 fn act(x: &<Self::X as Monoid>::S, a: &<Self::A as Monoid>::S) -> <Self::X as Monoid>::S {
                     x + a
+                }
+            }
+
+            impl Monoid for Add<S<$t>> {
+                type S = S<$t>;
+                const E: Self::S = S {
+                    value: 0,
+                    length: 0,
+                };
+                fn op(lhs: &Self::S, rhs: &Self::S) -> Self::S {
+                    S {
+                        value: lhs.value + rhs.value,
+                        length: lhs.length + rhs.length,
+                    }
+                }
+            }
+
+            impl ActMonoid for AddSum<$t> {
+                type A = Add<$t>;
+                type X = Add<S<$t>>;
+
+                fn act(x: &<Self::X as Monoid>::S, a: &<Self::A as Monoid>::S) -> <Self::X as Monoid>::S {
+                    S {
+                        value: x.value + a * x.length as $t,
+                        length: x.length,
+                    }
+                }
+            }
+
+            impl std::fmt::Display for S<$t> {
+                fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                    write!(f, "{}", self.value)
                 }
             }
         )*
