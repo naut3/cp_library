@@ -95,6 +95,37 @@ impl WaveletMatrix {
 
         return ret;
     }
+
+    /// [l, r) で upper 未満の要素の数を求める
+    pub fn range_freq(&self, mut l: usize, mut r: usize, upper: u64) -> u64 {
+        let mut ret = 0u64;
+
+        for j in (0..self.height).rev() {
+            let l0 = if l > 0 {
+                self.bvs[j].rank(l - 1, false)
+            } else {
+                0
+            };
+            let r0 = if r > 0 {
+                self.bvs[j].rank(r - 1, false)
+            } else {
+                0
+            };
+
+            if (upper >> j) & 1 == 1 {
+                ret += (r0 - l0) as u64;
+                let count_zeros = self.bvs[j].rank(self.length - 1, false);
+
+                l += (count_zeros - l0) as usize;
+                r += (count_zeros - r0) as usize;
+            } else {
+                l = l0 as usize;
+                r = r0 as usize;
+            }
+        }
+
+        ret
+    }
 }
 
 impl std::fmt::Display for WaveletMatrix {
