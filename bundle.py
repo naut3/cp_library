@@ -38,6 +38,7 @@ dependencies_graph: dict[str, list[str]] = {
     "topological_sort": ["graph"],
     "union_find": [],
     "z_algorithm": [],
+    "wavelet_matrix": [],
 }
 
 # モジュール名の集合

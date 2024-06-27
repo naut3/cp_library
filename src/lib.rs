@@ -28,4 +28,5 @@ pub mod sparse_table;
 pub mod static_rectangle_sum;
 pub mod topological_sort;
 pub mod union_find;
+pub mod wavelet_matrix;
 pub mod z_algorithm;
