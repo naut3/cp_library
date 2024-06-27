@@ -8,7 +8,6 @@
 * [双対セグメント木(Dual Segment Tree)](./src/dual_segment_tree.rs)
 * [遅延伝搬セグメント木(Lazy Segment Tree)](./src/lazy_segment_tree.rs)
 * [Wavelet Matrix](./src/wavelet_matrix.rs)
-  * [条件付きの区間和とかに対応できるWavelet Matrix](./src/weighted_wm.rs)  
 
 ## グラフ
 
