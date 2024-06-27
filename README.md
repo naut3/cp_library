@@ -7,6 +7,7 @@
 * [セグメント木(Segment Tree)](./src/segment_tree.rs)
 * [双対セグメント木(Dual Segment Tree)](./src/dual_segment_tree.rs)
 * [遅延伝搬セグメント木(Lazy Segment Tree)](./src/lazy_segment_tree.rs)
+* [Wavelet Matrix](./src/wavelet_matrix.rs)
 
 ## グラフ
 
