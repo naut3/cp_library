@@ -29,4 +29,5 @@ pub mod static_rectangle_sum;
 pub mod topological_sort;
 pub mod union_find;
 pub mod wavelet_matrix;
+pub mod weighted_wm;
 pub mod z_algorithm;

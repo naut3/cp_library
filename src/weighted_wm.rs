@@ -1,19 +1,21 @@
-pub struct WaveletMatrix {
+/// 通常の Wavelet Matrix に区間和の情報を付け足して、重み付き和みたいなクエリに対応できるように改造されたWavelet Matrix
+pub struct WeightedWaveletMatrix {
     bvs: Vec<BitVector>,
     length: usize,
     height: usize,
+    cums: Vec<Vec<u64>>,
 }
 
-impl WaveletMatrix {
+impl WeightedWaveletMatrix {
     pub fn from(array: &[u64], height: usize) -> Self {
         let mut bvs = vec![];
+        let mut cums = vec![];
         let mut array = array.to_vec();
 
         for i in (0..height).rev() {
             // i bit 目で安定ソートする
             let mut a0 = vec![];
             let mut a1 = vec![];
-
             let mut bv = vec![];
 
             for (j, &a) in array.iter().enumerate() {
@@ -32,15 +34,25 @@ impl WaveletMatrix {
 
             bvs.push(BitVector::from(&bv));
             a0.append(&mut a1);
+
+            let mut cs = vec![0];
+
+            for j in 0..array.len() {
+                cs.push(cs[j] + a0[j]);
+            }
+
+            cums.push(cs);
             array = a0;
         }
 
         bvs.reverse();
+        cums.reverse();
 
         Self {
             bvs,
             length: array.len(),
             height,
+            cums,
         }
     }
 
@@ -126,9 +138,39 @@ impl WaveletMatrix {
 
         ret
     }
+
+    /// [l, r) で upper 未満の要素の総和を求める
+    pub fn range_sum(&self, mut l: usize, mut r: usize, upper: u64) -> u64 {
+        let mut ret = 0u64;
+
+        for j in (0..self.height).rev() {
+            let l0 = if l > 0 {
+                self.bvs[j].rank(l - 1, false)
+            } else {
+                0
+            };
+            let r0 = if r > 0 {
+                self.bvs[j].rank(r - 1, false)
+            } else {
+                0
+            };
+
+            if (upper >> j) & 1 == 1 {
+                ret += self.cums[j][r0 as usize] - self.cums[j][l0 as usize];
+                let count_zeros = self.bvs[j].rank(self.length - 1, false);
+                l += (count_zeros - l0) as usize;
+                r += (count_zeros - r0) as usize;
+            } else {
+                l = l0 as usize;
+                r = r0 as usize;
+            }
+        }
+
+        ret
+    }
 }
 
-impl std::fmt::Display for WaveletMatrix {
+impl std::fmt::Display for WeightedWaveletMatrix {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         for i in 0..64 {
             let _ = writeln!(f, "{}", self.bvs[i]);
