@@ -156,3 +156,39 @@ fn test_wm_random_range_sum() {
         assert_eq!(wm.range_sum(l, r, upper), cnt);
     }
 }
+
+#[test]
+fn test_wm_random_sum() {
+    let mut rng = thread_rng();
+
+    let n = 2500;
+
+    let a = (0..n)
+        .map(|_| {
+            let a = rng.gen_range(0..1 << 30);
+            (a, a)
+        })
+        .collect::<Vec<_>>();
+    let wm = WaveletMatrix::from_weighted(&a, 60);
+
+    let interval = |rng: &mut ThreadRng| {
+        let mut l = rng.gen_range(0..n - 1);
+        let mut r = rng.gen_range(0..n);
+        if l >= r {
+            (l, r) = (r, l + 1);
+        }
+
+        (l, r)
+    };
+
+    for _ in 0..n {
+        let (l, r) = interval(&mut rng);
+
+        let mut cnt = 0;
+        for i in l..r {
+            cnt += a[i].0;
+        }
+
+        assert_eq!(wm.sum(l, r), cnt);
+    }
+}
