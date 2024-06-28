@@ -6,6 +6,7 @@ pub struct WaveletMatrix<T> {
 }
 
 impl WaveletMatrix<()> {
+    /// 総和系クエリを利用しない場合のWavelet Matrixを構築する
     pub fn from(array: &[u64], height: usize) -> Self {
         let mut bvs = vec![];
         let mut array = array.to_vec();
@@ -45,7 +46,9 @@ impl WaveletMatrix<()> {
             cums: vec![],
         }
     }
+}
 
+impl<T> WaveletMatrix<T> {
     /// i 番目の要素の値を取得する
     pub fn access(&self, mut i: usize) -> u64 {
         // 上のbitから順番に位置を変更しながら走査すればよい
@@ -131,6 +134,7 @@ impl WaveletMatrix<()> {
 }
 
 impl WaveletMatrix<u64> {
+    /// 自身の値を使った総和系クエリを利用する場合のWavelet Matrixを構築する
     pub fn from_weighted_own(array: &[u64], height: usize) -> Self {
         let mut bvs = vec![];
         let mut cums = vec![];
@@ -182,6 +186,7 @@ impl WaveletMatrix<u64> {
 }
 
 impl<T: Default + std::ops::Add<Output = T> + Clone + Copy> WaveletMatrix<T> {
+    /// 自身の値を使わない総和系クエリを利用する場合のWavelet Matrixを構築する
     pub fn from_weighted(array: &[(u64, T)], height: usize) -> Self {
         let mut bvs = vec![];
         let mut cums = vec![];
@@ -260,6 +265,31 @@ impl<T: Default + std::ops::Add<Output = T> + Clone + Copy + std::ops::Sub<Outpu
                 l = l0 as usize;
                 r = r0 as usize;
             }
+        }
+
+        ret
+    }
+
+    /// [l, r) の要素の総和を求める
+    pub fn sum(&self, mut l: usize, mut r: usize) -> T {
+        let mut ret = T::default();
+
+        for j in (0..self.height).rev() {
+            let l0 = if l > 0 {
+                self.bvs[j].rank(l - 1, false)
+            } else {
+                0
+            };
+            let r0 = if r > 0 {
+                self.bvs[j].rank(r - 1, false)
+            } else {
+                0
+            };
+
+            ret = ret + self.cums[j][r0 as usize] - self.cums[j][l0 as usize];
+            let count_zeros = self.bvs[j].rank(self.length - 1, false);
+            l += (count_zeros - l0) as usize;
+            r += (count_zeros - r0) as usize;
         }
 
         ret
