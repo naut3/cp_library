@@ -27,13 +27,3 @@ def topological_sort(graph: list[list[int]]) -> list[int]:
 
     order.reverse()
     return order
-
-
-N, M = map(int, input().split())
-G = [[] for _ in range(N)]
-
-for _ in range(M):
-    u, v = map(int, input().split())
-    G[u].append(v)
-
-[print(v) for v in topological_sort(G)]
