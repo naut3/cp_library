@@ -1,4 +1,5 @@
 import sys
+sys.setrecursionlimit(10 ** 9)
 
 
 def strongly_connected_components(graph: list[list[int]]) -> list[int]:
@@ -38,20 +39,3 @@ def strongly_connected_components(graph: list[list[int]]) -> list[int]:
             cnt += 1
 
     return ret
-
-
-sys.setrecursionlimit(10 ** 9)
-
-N, M = map(int, input().split())
-graph = [[] for _ in range(N)]
-
-for _ in range(M):
-    u, v = map(int, input().split())
-    graph[u].append(v)
-
-scc = strongly_connected_components(graph)
-Q = int(input())
-
-for _ in range(Q):
-    u, v = map(int, input().split())
-    print(int(scc[u] == scc[v]))
