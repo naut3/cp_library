@@ -87,3 +87,19 @@ impl<M: Monoid<S = S>, S: Clone + Copy> SegmentTree<M> {
         return M::op(&sl, &sr);
     }
 }
+
+impl<M: Monoid<S = S>, S: std::fmt::Display + Copy> std::fmt::Display for SegmentTree<M> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            (0..self.size)
+                .map(|i| self.get(i))
+                .collect::<Vec<_>>()
+                .iter()
+                .map(|x| x.to_string())
+                .collect::<Vec<_>>()
+                .join(" ")
+        )
+    }
+}

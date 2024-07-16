@@ -39,6 +39,7 @@ dependencies_graph: dict[str, list[str]] = {
     "union_find": [],
     "z_algorithm": [],
     "wavelet_matrix": [],
+    "gcd": [],
 }
 
 # モジュール名の集合
