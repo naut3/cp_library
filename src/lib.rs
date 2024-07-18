@@ -8,6 +8,7 @@ pub mod dijkstras_algorithm;
 pub mod dual_segment_tree;
 pub mod dynamic_binary_indexed_tree;
 pub mod dynamic_binary_indexed_tree_2d;
+pub mod extended_number;
 pub mod floyd_warshall_algorithm;
 pub mod gcd;
 pub mod graph;
