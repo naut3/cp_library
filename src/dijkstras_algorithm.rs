@@ -1,19 +1,22 @@
+use crate::extended_number::ExtendedNumber;
 use crate::graph::Graph;
 
+/// calculate shortest path from `source` and return sum of weight. If can't reach from `source`, return infinity.
 pub fn dijkstras_algorithm<
-    W: Sized + std::ops::Add<Output = W> + PartialOrd + Ord + Default + Clone + Copy + 'static,
+    W: ExtendedNumber<Item = T> + Clone + Copy + PartialOrd + Ord + std::ops::Add<Output = W>,
+    T: Clone + Copy,
 >(
-    graph: &dyn Graph<Weight = W>,
+    graph: &dyn Graph<Weight = W::Item>,
     source: usize,
-) -> Vec<Option<W>> {
+) -> Vec<W> {
     assert!(source < graph.size());
 
-    let mut dist = vec![None; graph.size()];
-    dist[source] = Some(W::default());
+    let mut dist = vec![W::inf(); graph.size()];
+    dist[source] = W::zero();
     let mut seen = vec![false; graph.size()];
 
     let mut hq = std::collections::BinaryHeap::default();
-    hq.push((std::cmp::Reverse(W::default()), source));
+    hq.push((std::cmp::Reverse(W::zero()), source));
 
     while let Some((_, u)) = hq.pop() {
         if seen[u] {
@@ -23,19 +26,11 @@ pub fn dijkstras_algorithm<
 
         for &(v, w) in graph.adjacent(u) {
             if !seen[v] {
-                let d = dist[u].unwrap() + w;
+                let d = dist[u] + W::from(w);
 
-                match dist[v] {
-                    Some(pd) => {
-                        if d < pd {
-                            dist[v] = Some(d);
-                            hq.push((std::cmp::Reverse(d), v));
-                        }
-                    }
-                    None => {
-                        dist[v] = Some(d);
-                        hq.push((std::cmp::Reverse(d), v));
-                    }
+                if d < dist[v] {
+                    dist[v] = d;
+                    hq.push((std::cmp::Reverse(d), v));
                 }
             }
         }
