@@ -12,7 +12,7 @@ dependencies_graph: dict[str, list[str]] = {
     "combination": ["modint"],
     "coordinate_compression": [],
     "cumulative_sum": [],
-    "dijkstras_algorithm": ["graph"],
+    "dijkstras_algorithm": ["graph", "extended_number"],
     "dual_segment_tree": ["monoid"],
     "dynamic_binary_indexed_tree": [],
     "dynamic_binary_indexed_tree_2d": [],
@@ -40,6 +40,7 @@ dependencies_graph: dict[str, list[str]] = {
     "z_algorithm": [],
     "wavelet_matrix": [],
     "gcd": [],
+    "extended_number": [],
 }
 
 # モジュール名の集合
